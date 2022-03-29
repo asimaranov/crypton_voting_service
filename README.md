@@ -1,4 +1,4 @@
-# crypton_voting_service
+# Crypton voting service
 
 Crypton academy interview test solution
 
