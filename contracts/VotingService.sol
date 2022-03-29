@@ -79,6 +79,7 @@ contract VotingService {
         voting.leader.transfer(voting.votingBudget);
         voting.votingBudget = 0;
     }
+    
 
     function getVotingsNum() public view returns (uint256) {
         return votingsNum;
