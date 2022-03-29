@@ -16,12 +16,9 @@ describe("VotingServiceContract", function () {
         [owner, user1, user2, ...users] = await ethers.getSigners();
         votingService = await VotingServiceContract.deploy();
         voting = await votingService.addVoting();
-
-
     })
 
     describe("Deployment", function () {
-
         it("Check owner", async function () {
             expect(await votingService.owner()).to.equal(owner.address)
         })
@@ -81,11 +78,11 @@ describe("VotingServiceContract", function () {
 
         });
 
-        it("Check early finish", async function(){
+        it("Check early finish", async function () {
             await expect(votingService.finish(voting.value)).to.be.revertedWith('Its too early');
         });
 
-        it("Check in-time finish", async function(){
+        it("Check in-time finish", async function () {
             await votingService.connect(user1).vote(voting.value, user2.address, { value: ethers.utils.parseEther("0.01") }); // Some user vote
 
             await network.provider.send("evm_increaseTime", [60 * 60 * 24 * 3]); // Add 3 days
@@ -101,11 +98,11 @@ describe("VotingServiceContract", function () {
 
         });
 
-        it("Check withdraw attempt not by owner", async function(){
+        it("Check withdraw attempt not by owner", async function () {
             await expect(votingService.connect(user1).withdrawMoney()).to.be.revertedWith("You're not the owner!");
         });
 
-        it("Check withdraw by owner", async function(){
+        it("Check withdraw by owner", async function () {
             const owner_initial_balance = await owner.getBalance();
 
             await votingService.connect(user1).vote(voting.value, user2.address, { value: ethers.utils.parseEther("0.01") }); // Some user vote
@@ -117,10 +114,10 @@ describe("VotingServiceContract", function () {
             await votingService.withdrawMoney();
 
             await expect(await owner.getBalance() > owner_initial_balance);
-            
+
         });
 
-        it("Check impossibility to vote after", async function(){
+        it("Check impossibility to vote after", async function () {
             await votingService.connect(user1).vote(voting.value, user2.address, { value: ethers.utils.parseEther("0.01") }); // Some user vote
             await network.provider.send("evm_increaseTime", [60 * 60 * 24 * 3]); // Add 3 days
             await votingService.finish(voting.value);
@@ -129,7 +126,7 @@ describe("VotingServiceContract", function () {
 
         });
 
-        it("Check double finish", async function(){
+        it("Check double finish", async function () {
             await votingService.connect(user1).vote(voting.value, user2.address, { value: ethers.utils.parseEther("0.01") }); // Some user vote
             await network.provider.send("evm_increaseTime", [60 * 60 * 24 * 3]); // Add 3 days
             await votingService.finish(voting.value);

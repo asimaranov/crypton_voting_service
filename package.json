@@ -18,5 +18,7 @@
     "hardhat": "^2.9.2"
   },
   "dependencies": {
+    "dotenv": "^16.0.0",
+    "solidity-coverage": "^0.7.20"
   }
 }
