@@ -25,6 +25,8 @@ contract VotingService {
 
     uint256 serviceBudget;
 
+    event VotingCreated(uint256 votingId);
+
     constructor() payable {
         owner = payable(msg.sender);
     }
@@ -35,6 +37,7 @@ contract VotingService {
         Voting storage voting = votings[votingId];
         voting.endsAt = block.timestamp + 3 days;
         votingsNum++;
+        emit VotingCreated(votingId);
     }
 
     function withdrawMoney() public payable {
