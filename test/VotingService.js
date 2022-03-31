@@ -116,6 +116,12 @@ describe("VotingServiceContract", function () {
             await expect(votingService.connect(user1).withdrawMoney()).to.be.revertedWith("You're not the owner!");
         });
 
+        it("Check voting ends date is in the future", async function () {
+            const endsAtDateTimestamp = await votingService.connect(user1).getVotingDedline(votingId);
+            const endsAtDate = new Date(endsAtDateTimestamp * 1000);
+            await expect(endsAtDate > Date.now());
+        });
+
         it("Check withdraw by owner", async function () {
             const owner_initial_balance = await owner.getBalance();
 
