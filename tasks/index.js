@@ -1,4 +1,4 @@
-const deployedContractAddr = "0x58AA9D90540f77e93622b6080246DDFfb538AC17";
+const deployedContractAddr = "0x0598daB4aA55067829dC440266133AfD72c38a49";
 
 task("deploy", "Deploys contract to network").setAction(async () => {
     const [deployer] = await ethers.getSigners();
@@ -61,4 +61,19 @@ task("getLeader", "Shows the leader of a specific voting")
         const votingService = await VotingServiceContract.attach(deployedContractAddr);
         const leader = await votingService.getLeader(args['votingId']);
         console.log(`Voting leader: ${leader}`);
+    });
+
+
+task("votingStats", "Shows the statistics of a specific voting")
+    .addParam("votingId", "Voting to vote id")
+    .setAction(async (args) => {
+        const VotingServiceContract = await ethers.getContractFactory("VotingService");
+        const votingService = await VotingServiceContract.attach(deployedContractAddr);
+        const leader = await votingService.getLeader(args['votingId']);
+        const votersNum = await votingService.getVotersNum(args['votingId']);
+        const isFinished = await votingService.getVotingFinished(args['votingId']);
+        const getVotingDedline = await votingService.getVotingDedline(args['votingId']);
+        const endsAtDate = new Date(getVotingDedline * 1000);
+
+        console.log(`Voting stats:\nVoters num: ${votersNum}\nLeader: ${leader}\nIs finished: ${isFinished}\nActive until: ${endsAtDate}`);
     });

@@ -97,6 +97,10 @@ contract VotingService {
         return votings[votingId].votersNum;
     }
 
+    function getVotingDedline(uint256 votingId) public view returns (uint256) {
+        return votings[votingId].endsAt;
+    }
+    
     function getLeader(uint256 votingId) public view returns (address) {
         return votings[votingId].leader;
     }
